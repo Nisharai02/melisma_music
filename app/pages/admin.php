@@ -25,6 +25,10 @@ if(!is_admin()) {
     case 'artists':
       require page('admin/artists');
       break;
+
+      case 'playlist':
+        require page('admin/playlist');
+        break;
     
     case 'songs':
       require page('admin/songs');

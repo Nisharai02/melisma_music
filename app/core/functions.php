@@ -160,6 +160,17 @@ function get_artist($id) {
   return "Unknown";
 }
 
+function get_creator($id) {
+  $query = "select username from users where id = :id limit 1";
+  $row = db_query_one($query,['id'=>$id]);
+
+  if(!empty($row['username'])) {
+    return $row['username'];
+  }
+
+  return "Unknown";
+}
+
 function esc($str) {
   return nl2br(htmlspecialchars($str)); //new line to break
 }

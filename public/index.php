@@ -6,6 +6,8 @@ require "../app/core/init.php";
 $URL = $_GET['url'] ?? "home";
 $URL = explode("/", $URL);
 
+
+
 // get page number
 $page = $_GET['page'] ?? 1;
 $page = (int)$page;
@@ -19,3 +21,5 @@ if(file_exists($file)) {
 else {
   require page("404");
 }
+
+

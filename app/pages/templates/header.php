@@ -50,6 +50,11 @@
         <div class="nav-item"><a href="<?=ROOT?>">Home</a></div>
         <div class="nav-item"><a href="<?=ROOT?>/music">Music</a></div>
 
+        <?php if(logged_in()):?>
+          <div class="nav-item"><a href="<?=ROOT?>/playlist">Your Playlists</a></div>
+        <?php endif; ?>
+       
+
         <!-- category drop down -->
         <div class="nav-item dropdown">
           <a href="#">Category</a>

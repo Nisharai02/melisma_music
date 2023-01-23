@@ -52,6 +52,8 @@
         <div class="nav-item"><a href="<?=ROOT?>/admin/songs">Songs</a></div>
         <div class="nav-item"><a href="<?=ROOT?>/admin/categories">Categories</a></div>
         <div class="nav-item"><a href="<?=ROOT?>/admin/artists">Artists</a></div>
+        <div class="nav-item"><a href="<?=ROOT?>/admin/playlist">User Playlists</a></div>
+
 
         <!-- hi user dropdown -->
         <div class="nav-item dropdown">
