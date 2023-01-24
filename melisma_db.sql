@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2023 at 07:08 PM
+-- Generation Time: Jan 23, 2023 at 07:03 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -77,6 +77,56 @@ INSERT INTO `categories` (`id`, `category`, `disabled`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `main_playlist`
+--
+
+CREATE TABLE `main_playlist` (
+  `user_id` int NOT NULL,
+  `id` int NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `image` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `main_playlist`
+--
+
+INSERT INTO `main_playlist` (`user_id`, `id`, `name`, `image`) VALUES
+(1, 6, 'Folklore', 'uploads/download.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `playlist_songs`
+--
+
+CREATE TABLE `playlist_songs` (
+  `id` int NOT NULL,
+  `song_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `playlist_songs`
+--
+
+INSERT INTO `playlist_songs` (`id`, `song_id`) VALUES
+(2, 4),
+(2, 4),
+(2, 6),
+(3, 7),
+(4, 1),
+(4, 4),
+(4, 6),
+(4, 7),
+(4, 7),
+(4, 6),
+(4, 5),
+(2, 5),
+(6, 4);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `songs`
 --
 
@@ -100,7 +150,7 @@ CREATE TABLE `songs` (
 
 INSERT INTO `songs` (`id`, `title`, `user_id`, `artist_id`, `image`, `file`, `category_id`, `date`, `views`, `slug`, `featured`) VALUES
 (1, '505', 1, 8, 'uploads/Arctic Monkeys.jpg', 'uploads/505_Arctic_Monkeys.mp3', 16, '2023-01-22 06:04:58', 3, 'im-going-back', 1),
-(4, 'August', 1, 3, 'uploads/Beauty in black & white.jpg', 'uploads/August_TS.mp3', 15, '2023-01-22 07:23:41', 36, 'august', 1),
+(4, 'August', 1, 3, 'uploads/Beauty in black & white.jpg', 'uploads/August_TS.mp3', 15, '2023-01-22 07:23:41', 39, 'august', 1),
 (5, 'Bloody Mary', 1, 6, 'uploads/Lady Gaga.jpg', 'uploads/Bloody Mary_Lady Gaga.mp3', 14, '2023-01-22 07:24:17', 5, 'bloody-mary', 0),
 (6, 'Bad Romance', 1, 6, 'uploads/ae98c6f4-857d-4139-bea5-5018336111a0.jpg', 'uploads/Bad Romance_LG.mp3', 14, '2023-01-22 09:35:24', 6, 'bad-romance', 0),
 (7, 'Just One Day', 1, 12, 'uploads/972b5809-812d-4e7f-9b06-72a78c6967b1.jpg', 'uploads/[MV] BTS(방탄소년단) _ Just One Day(하루만).mp3', 14, '2023-01-22 16:32:34', 1, 'just-one-day', 0);
@@ -143,7 +193,8 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `date`) VALU
 (22, 'mega', 'mega@email.com', '$2y$10$0DfD.nn1EFX1z.XdGpJSiuP2cXk503wfpkW1am8SZkd8f/flWRXMi', 'user', '2023-01-22 13:22:53'),
 (23, 'mega', 'mega@email.com', '$2y$10$BxJO6pWK8rREDOf5se9LXO6ntOYyn9aCDLHfo92I.hwIPukTG/lnW', 'user', '2023-01-22 13:26:14'),
 (24, 'mega', 'mega@email.com', '$2y$10$pc0K/ehKBuSLM8EBx6uY4O.2Fkyb3vpmud1QHr4qNdLne7/KcRMf.', 'user', '2023-01-22 13:27:59'),
-(25, 'hannah', 'hannah@email.com', '$2y$10$JuN0l09dTq52dlxhWPw3duSi9lpSJfK85mmgBLLhCk7hQobEysrd6', 'user', '2023-01-22 13:32:19');
+(25, 'hannah', 'hannah@email.com', '$2y$10$JuN0l09dTq52dlxhWPw3duSi9lpSJfK85mmgBLLhCk7hQobEysrd6', 'user', '2023-01-22 13:32:19'),
+(27, 'diana', 'diana@email.com', '$2y$10$E4txilzVJrda/w1pyLo0pO//zbVxKoUrrO58CQlyo2SCkRWRLuNWS', 'user', '2023-01-23 18:59:59');
 
 --
 -- Indexes for dumped tables
@@ -163,6 +214,20 @@ ALTER TABLE `artists`
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
   ADD KEY `category` (`category`);
+
+--
+-- Indexes for table `main_playlist`
+--
+ALTER TABLE `main_playlist`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_fk` (`user_id`);
+
+--
+-- Indexes for table `playlist_songs`
+--
+ALTER TABLE `playlist_songs`
+  ADD KEY `pid_fk` (`id`),
+  ADD KEY `song_id` (`song_id`) USING BTREE;
 
 --
 -- Indexes for table `songs`
@@ -204,6 +269,12 @@ ALTER TABLE `categories`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
+-- AUTO_INCREMENT for table `main_playlist`
+--
+ALTER TABLE `main_playlist`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT for table `songs`
 --
 ALTER TABLE `songs`
@@ -213,7 +284,17 @@ ALTER TABLE `songs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `playlist_songs`
+--
+ALTER TABLE `playlist_songs`
+  ADD CONSTRAINT `song_fk` FOREIGN KEY (`song_id`) REFERENCES `songs` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
