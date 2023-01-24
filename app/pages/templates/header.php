@@ -102,4 +102,8 @@
         </div>
       </div>
     </header>
+
+    <?php if(message()):?>
+  <div class="alert"><?=message('',true)?></div>
+<?php endif; ?>
     <!-- header end -->

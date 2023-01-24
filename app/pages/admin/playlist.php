@@ -52,7 +52,7 @@ if($action == 'edit') {
       $query = "update main_playlist set name = :name,user_id = :user_id where id = :id limit 1";
         
       if(!empty($destination)) {
-        $query = "update main_playlist set name = :name,user_id = :user_id where id = :id limit 1";
+        $query = "update main_playlist set name = :name,image = :image,user_id = :user_id where id = :id limit 1";
         $values['image'] = $destination;
       }
         

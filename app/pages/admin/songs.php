@@ -415,7 +415,7 @@ else if($action == 'delete') {
        </div>
       <?php else:?>
        <?php 
-          $limit = 2;
+          $limit = 10;
           $offset = ($page - 1) * $limit;
 
           $query = "select * from songs order by id desc limit $limit offset $offset";
