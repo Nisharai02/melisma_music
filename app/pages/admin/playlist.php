@@ -1,10 +1,4 @@
 <?php
-
-// $action = $URL[1] ?? null;
-// $id = $URL[2] ?? null; 
-
-
-//  edit section
 if($action == 'edit') {
   
   $query = "select * from main_playlist where id = :id limit 1";

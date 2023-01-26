@@ -15,9 +15,9 @@
       if(empty($_POST['category_id'])) {
         $errors['category_id'] = "a category is required";
       }
-      // validating artist
-      if(empty($_POST['artist_id'])) {
-        $errors['artist_id'] = "an artist is required";
+      // validating album
+      if(empty($_POST['album_id'])) {
+        $errors['album_id'] = "an album is required";
       }
 
       //validate image
@@ -67,6 +67,7 @@
         $values['title'] = trim($_POST['title']);
         $values['category_id'] = trim($_POST['category_id']);
         $values['artist_id'] = trim($_POST['artist_id']);
+        $values['album_id'] = trim($_POST['album_id']);
         $values['image'] = $img_destination;
         $values['file'] = $file_destination;
         $values['user_id'] = user('id');
@@ -75,7 +76,7 @@
         $values['slug'] = str_to_url($values['title']);
       
 
-        $query = "insert into songs(title,image,file,user_id,category_id,artist_id,date,views,slug) values (:title,:image,:file,:user_id,:category_id,:artist_id,:date,:views,:slug)";
+        $query = "insert into songs(title,image,file,user_id,category_id,artist_id,album_id,date,views,slug) values (:title,:image,:file,:user_id,:category_id,:artist_id,:album_id,:date,:views,:slug)";
 
         db_query($query,$values);
         message("Song created successfully.");
@@ -107,6 +108,11 @@ else if($action == 'edit') {
     // validating artist
     if(empty($_POST['artist_id'])) {
       $errors['artist_id'] = "an artist is required";
+    }
+
+     // validating album
+     if(empty($_POST['album_id'])) {
+      $errors['album_id'] = "an album is required";
     }
 
     //validate image
@@ -160,10 +166,11 @@ else if($action == 'edit') {
       $values['title'] = trim($_POST['title']);
       $values['category_id'] = trim($_POST['category_id']);
       $values['artist_id'] = trim($_POST['artist_id']);
+      $values['album_id'] = trim($_POST['album_id']);
       $values['user_id'] = user('id');
       $values['id'] = $id;
 
-      $query = "update songs set title = :title,user_id = :user_id,category_id = :category_id,artist_id = :artist_id";
+      $query = "update songs set title = :title,user_id = :user_id,category_id = :category_id,artist_id = :artist_id,album_id = :album_id";
         
       if(!empty($destination_image)) {
         $query .= ", image = :image";
@@ -273,6 +280,24 @@ else if($action == 'delete') {
             <small class="error"><?=$errors['artist_id']?></small>
           <?php endif; ?>
 
+          <!-- selecting album of song -->
+          <?php
+            $query = "select * from album order by name asc";
+            $album = db_query($query);
+          ?>
+
+          <select name="album_id" class="form-control my-1">
+            <option value="">Select Album</option>
+            <?php if(!empty($album)): ?>
+              <?php foreach($album as $alb): ?>
+                <option <?=set_select('album_id',$alb['id'])?> value="<?=$alb['id']?>"><?=$alb['name']?></option>
+              <?php endforeach; ?>
+            <?php endif; ?>
+          </select>
+          <?php if(!empty($errors['album_id'])): ?>
+            <small class="error"><?=$errors['album_id']?></small>
+          <?php endif; ?>
+
           <!-- image add -->
           <div style="background-color: white;color: #222222;" class="form-control my-1">
             <div>Cover Image:</div>
@@ -350,6 +375,24 @@ else if($action == 'delete') {
           </select>
           <?php if(!empty($errors['artist_id'])): ?>
             <small class="error"><?=$errors['artist_id']?></small>
+          <?php endif; ?>
+
+          <!-- selecting album of song -->
+          <?php
+            $query = "select * from album order by name asc";
+            $album = db_query($query);
+          ?>
+
+          <select name="album_id" class="form-control my-1">
+            <option value="">Select Album</option>
+            <?php if(!empty($album)): ?>
+              <?php foreach($album as $alb): ?>
+                <option <?=set_select('album_id',$alb['id'],$row['album_id'])?> value="<?=$alb['id']?>"><?=$alb['name']?></option>
+              <?php endforeach; ?>
+            <?php endif; ?>
+          </select>
+          <?php if(!empty($errors['album_id'])): ?>
+            <small class="error"><?=$errors['album_id']?></small>
           <?php endif; ?>
 
           <!-- image add -->
@@ -433,6 +476,7 @@ else if($action == 'delete') {
             <th>Image</th>
             <th>Category</th>
             <th>Artist</th>
+            <th>Album</th>
             <th>Audio</th>
             <th>Action</th>
           </tr>
@@ -445,6 +489,7 @@ else if($action == 'delete') {
                <td><img src="<?=ROOT?>/<?=$row['image']?>" style="width: 200px; height: 200px; object-fit:cover;"></td>
                <td><?=get_category($row['category_id'])?></td>
                <td><?=get_artist($row['artist_id'])?></td>
+               <td><?=get_album($row['album_id'])?></td>
                <td>
                   <audio controls>
                     <source src="<?=ROOT?>/<?=$row['file']?>" type="audio/mpeg">

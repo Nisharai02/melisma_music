@@ -160,6 +160,17 @@ function get_artist($id) {
   return "Unknown";
 }
 
+function get_album($id) {
+  $query = "select name from album where id = :id limit 1";
+  $row = db_query_one($query,['id'=>$id]);
+
+  if(!empty($row['name'])) {
+    return $row['name'];
+  }
+
+  return "Unknown";
+}
+
 function get_creator($id) {
   $query = "select username from users where id = :id limit 1";
   $row = db_query_one($query,['id'=>$id]);

@@ -76,6 +76,7 @@
         <!-- category dropdown end -->
 
         <div class="nav-item"><a href="<?=ROOT?>/artists">Artists</a></div>
+        <div class="nav-item"><a href="<?=ROOT?>/albums">Albums</a></div>
         <div class="nav-item"><a href="<?=ROOT?>/about">About Us</a></div>
 
         <!-- hi user dropdown -->
