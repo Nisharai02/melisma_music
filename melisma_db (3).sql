@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2023 at 01:21 PM
+-- Generation Time: Jan 31, 2023 at 01:33 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -201,7 +201,7 @@ END
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `not_more_than_10songs` BEFORE INSERT ON `songs` FOR EACH ROW BEGIN
+CREATE TRIGGER `not_more_than_6songs` BEFORE INSERT ON `songs` FOR EACH ROW BEGIN
 	IF (select count(*) from songs group by album_id having album_id=new.album_id)>6 THEN
         SIGNAL SQLSTATE '45000' set message_text='Cannot add more than 6 songs to an album';
     END IF;
