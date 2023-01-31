@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2023 at 11:35 AM
+-- Generation Time: Jan 31, 2023 at 01:21 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -41,7 +41,8 @@ CREATE TABLE `album` (
 
 INSERT INTO `album` (`id`, `name`, `image`, `artist_id`, `category_id`) VALUES
 (11, 'Folklore', 'uploads/download.jpg', 3, 15),
-(12, 'Born This Way', 'uploads/dda16339-0172-4611-8195-6361e1b77fc7.jpg', 6, 14);
+(12, 'Born This Way', 'uploads/dda16339-0172-4611-8195-6361e1b77fc7.jpg', 6, 14),
+(13, 'Favourite Worst Nightmare', 'uploads/fav worst nm.jpg', 8, 16);
 
 -- --------------------------------------------------------
 
@@ -95,7 +96,8 @@ INSERT INTO `categories` (`id`, `category`, `disabled`) VALUES
 (16, 'Indie', 0),
 (17, 'Rock', 0),
 (18, 'Indian Classical', 0),
-(19, 'K-pop', 0);
+(19, 'K-pop', 0),
+(20, 'dummy', 1);
 
 -- --------------------------------------------------------
 
@@ -176,12 +178,36 @@ CREATE TABLE `songs` (
 --
 
 INSERT INTO `songs` (`id`, `title`, `user_id`, `artist_id`, `image`, `file`, `category_id`, `album_id`, `date`, `views`, `slug`, `featured`) VALUES
-(1, '505', 1, 8, 'uploads/Arctic Monkeys.jpg', 'uploads/505_Arctic_Monkeys.mp3', 16, 0, '2023-01-22 06:04:58', 5, 'im-going-back', 1),
-(4, 'August', 1, 3, 'uploads/Beauty in black & white.jpg', 'uploads/August_TS.mp3', 15, 11, '2023-01-22 07:23:41', 42, 'august', 1),
-(5, 'Bloody Mary', 1, 6, 'uploads/Lady Gaga.jpg', 'uploads/Bloody Mary_Lady Gaga.mp3', 14, 12, '2023-01-22 07:24:17', 9, 'bloody-mary', 0),
-(6, 'Bad Romance', 1, 6, 'uploads/ae98c6f4-857d-4139-bea5-5018336111a0.jpg', 'uploads/Bad Romance_LG.mp3', 14, 0, '2023-01-22 09:35:24', 6, 'bad-romance', 0),
-(7, 'Just One Day', 1, 12, 'uploads/972b5809-812d-4e7f-9b06-72a78c6967b1.jpg', 'uploads/[MV] BTS(방탄소년단) _ Just One Day(하루만).mp3', 19, 0, '2023-01-22 16:32:34', 1, 'just-one-day', 0),
-(8, 'Boy in Luv', 1, 12, 'uploads/BTS.jpg', 'uploads/[MV] BTS(방탄소년단) _ Boy In Luv(상남자).mp3', 19, 0, '2023-01-24 04:24:53', 3, 'boy-in-luv', 0);
+(1, '505', 1, 8, 'uploads/Arctic Monkeys.jpg', 'uploads/505_Arctic_Monkeys.mp3', 16, 13, '2023-01-22 06:04:58', 5, 'im-going-back', 1),
+(4, 'August', 1, 3, 'uploads/Beauty in black & white.jpg', 'uploads/August_TS.mp3', 15, 11, '2023-01-22 07:23:41', 43, 'august', 1),
+(5, 'Bloody Mary', 1, 6, 'uploads/Lady Gaga.jpg', 'uploads/Bloody Mary_Lady Gaga.mp3', 14, 11, '2023-01-22 07:24:17', 9, 'bloody-mary', 0),
+(6, 'Bad Romance', 1, 6, 'uploads/ae98c6f4-857d-4139-bea5-5018336111a0.jpg', 'uploads/Bad Romance_LG.mp3', 14, 12, '2023-01-22 09:35:24', 6, 'bad-romance', 0),
+(7, 'Just One Day', 1, 12, 'uploads/972b5809-812d-4e7f-9b06-72a78c6967b1.jpg', 'uploads/[MV] BTS(방탄소년단) _ Just One Day(하루만).mp3', 19, 11, '2023-01-22 16:32:34', 1, 'just-one-day', 0),
+(8, 'Boy in Luv', 1, 12, 'uploads/BTS.jpg', 'uploads/[MV] BTS(방탄소년단) _ Boy In Luv(상남자).mp3', 19, 11, '2023-01-24 04:24:53', 3, 'boy-in-luv', 0),
+(17, 'Dreams', 1, 7, 'uploads/fav worst nm.jpg', 'uploads/Fleetwood Mac - Dreams (Official Music Video).mp3', 17, 11, '2023-01-27 19:12:22', 0, 'dreams', 0),
+(18, 'dummy1', 1, 12, 'uploads/fav worst nm.jpg', 'uploads/BLACKPINK - \'How You Like That\' M_V.mp3', 16, 11, '2023-01-31 13:17:41', 0, 'dummy1', 0),
+(19, 'dummy2', 1, 7, 'uploads/wby.jpg', 'uploads/Fleetwood Mac - Dreams (Official Music Video).mp3', 14, 11, '2023-01-31 13:18:17', 0, 'dummy2', 0),
+(20, 'dummy3', 1, 5, 'uploads/wby.jpg', 'uploads/Fleetwood Mac - Dreams (Official Music Video).mp3', 14, 11, '2023-01-31 13:18:37', 0, 'dummy3', 0);
+
+--
+-- Triggers `songs`
+--
+DELIMITER $$
+CREATE TRIGGER `disabled` BEFORE INSERT ON `songs` FOR EACH ROW BEGIN
+    IF ((select disabled from categories where id = new.category_id) = 1)  THEN
+       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Can not insert songs to a disabled category';
+    END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `not_more_than_10songs` BEFORE INSERT ON `songs` FOR EACH ROW BEGIN
+	IF (select count(*) from songs group by album_id having album_id=new.album_id)>6 THEN
+        SIGNAL SQLSTATE '45000' set message_text='Cannot add more than 6 songs to an album';
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -283,7 +309,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `album`
 --
 ALTER TABLE `album`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `artists`
@@ -295,7 +321,7 @@ ALTER TABLE `artists`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `main_playlist`
@@ -307,7 +333,7 @@ ALTER TABLE `main_playlist`
 -- AUTO_INCREMENT for table `songs`
 --
 ALTER TABLE `songs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `users`
