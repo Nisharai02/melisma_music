@@ -34,7 +34,9 @@ CREATE TABLE `album` (
   `name` varchar(50) NOT NULL,
   `image` varchar(1024) NOT NULL,
   `artist_id` int NOT NULL,
-  `category_id` int NOT NULL
+  `category_id` int NOT NULL,
+   FOREIGN KEY(artist_id) REFERENCES artist(id),
+   FOREIGN KEY(category_id) REFERENCES categories(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -69,7 +71,8 @@ CREATE TABLE `artists` (
   `name` varchar(50) NOT NULL,
   `bio` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `user_id` int NOT NULL,
-  `image` varchar(1024) NOT NULL
+  `image` varchar(1024) NOT NULL,
+   FOREIGN KEY(user_id) REFERENCES users(id) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -123,7 +126,8 @@ CREATE TABLE `main_playlist` (
   `user_id` int NOT NULL,
   `id` int NOT NULL,
   `name` varchar(50) NOT NULL,
-  `image` varchar(100) NOT NULL
+  `image` varchar(100) NOT NULL,
+   FOREIGN KEY(user_id) REFERENCES users(id) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -141,7 +145,8 @@ INSERT INTO `main_playlist` (`user_id`, `id`, `name`, `image`) VALUES
 
 CREATE TABLE `playlist_songs` (
   `id` int NOT NULL,
-  `song_id` int NOT NULL
+  `song_id` int NOT NULL.
+   FOREIGN KEY(song_id) REFERENCES songs(id) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -184,7 +189,11 @@ CREATE TABLE `songs` (
   `date` datetime NOT NULL,
   `views` int NOT NULL,
   `slug` varchar(100) NOT NULL,
-  `featured` tinyint(1) NOT NULL DEFAULT '0'
+  `featured` tinyint(1) NOT NULL DEFAULT '0',
+   FOREIGN KEY(user_id) REFERENCES users(id),
+   FOREIGN KEY(artist_id) REFERENCES artist(id),
+   FOREIGN KEY(category_id) REFERENCES categories(id),
+   FOREIGN KEY(album_id) REFERENCES album(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
