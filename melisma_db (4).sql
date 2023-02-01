@@ -23,6 +23,8 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
+CREATE DATABASE IF NOT EXISTS melisma_db;
+USE melisma_db;
 --
 -- Table structure for table `album`
 --
