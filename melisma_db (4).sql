@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2023 at 01:33 PM
+-- Generation Time: Feb 01, 2023 at 08:16 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -43,6 +43,18 @@ INSERT INTO `album` (`id`, `name`, `image`, `artist_id`, `category_id`) VALUES
 (11, 'Folklore', 'uploads/download.jpg', 3, 15),
 (12, 'Born This Way', 'uploads/dda16339-0172-4611-8195-6361e1b77fc7.jpg', 6, 14),
 (13, 'Favourite Worst Nightmare', 'uploads/fav worst nm.jpg', 8, 16);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `album_songs`
+-- (See below for the actual view)
+--
+CREATE TABLE `album_songs` (
+`id` int
+,`name` varchar(50)
+,`title` varchar(100)
+);
 
 -- --------------------------------------------------------
 
@@ -234,6 +246,15 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `date`) VALU
 (29, 'varsh', 'varsh@email.com', '$2y$10$gezvQQEsbSyotupCcicqb.16c.BbVn/RMDVXo3C4IvQzrNs9KRRue', 'user', '2023-01-24 04:16:19'),
 (30, 'gouth', 'gouth@email.com', '$2y$10$j23UhfzMFR1tk9pkgBRocOZO9Iu75.biAG.iKrs2diEIpqxiN9otO', 'user', '2023-01-24 04:17:09'),
 (31, 'medini', 'medini@email.com', '$2y$10$ylW5DfgwvHzC0YXuiJiCRuq6LMvGNmSTojSOICiY7m/PR6JimU50i', 'user', '2023-01-24 07:58:01');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `album_songs`
+--
+DROP TABLE IF EXISTS `album_songs`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `album_songs`  AS SELECT `a`.`id` AS `id`, `a`.`name` AS `name`, `s`.`title` AS `title` FROM (`album` `a` join `songs` `s`) WHERE (`a`.`id` = `s`.`album_id`)  ;
 
 --
 -- Indexes for dumped tables
